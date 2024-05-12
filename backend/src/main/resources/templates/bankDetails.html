@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bank Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <div class="row mt-4">
+        <div class="col">
+            <h2>Bank Details</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Bank Name: <span th:text="${bank.getBankName()}"></span></h5>
+                    <p class="card-text">Total Accounts: <span th:text="${bank.accounts.size()}"></span></p>
+                    <p class="card-text">Total Transactions: <span th:text="${transactionCount}"></span></p>
+
+                    <p class="card-text">Total Transactions FLAT FEES: <span th:text="${flatFeesCount}"></span>
+                         Total AMOUNT : $<span th:text="${flatFeeAmount}"></span>
+                    </p>
+                    <p class="card-text">Total Transactions PERCENTAGE FEES: <span th:text="${percentageFeesCount}"></span>
+                         Total AMOUNT : $<span th:text="${percentageFeeAmount}"></span>
+                    </p>
+                    <p class="card-text">Total Transfer Amount: $<span th:text="${totalTransactionAmount}"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a id="back" href="/main" type="button" class="btn btn-secondary">Back to main</a>
+    <div class="row mt-4">
+        <div class="col">
+            <h2>Accounts</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Account ID</th>
+                    <th>Owner</th>
+                    <th>Balance</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="account: ${bank.accounts}">
+                    <td th:text="${account.id}"></td>
+                    <td th:text="${account.owner.username}"></td>
+                    <td th:text="${account.balance}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            <h2>TRANSACTIONS</h2>
+            <tr th:each="account: ${bank.accounts}">
+                <td colspan="3">Transactions for Account ID: <span th:text="${account.getId()}"></span></td>
+                <td colspan="2">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Originating Account</th>
+                            <th>Resulting Account</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="transaction: ${account.transactionList}">
+                            <td th:text="${transaction.getId()}"></td>
+                            <td th:text="${transaction.getOriginatingAcc()}"></td>
+                            <td th:text="${transaction.getResultingAcc()}"></td>
+                            <td th:text="${transaction.getAmount()}"></td>
+                            <td th:text="${transaction.getTransactionType().toString()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

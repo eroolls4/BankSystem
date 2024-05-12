@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="my-4">
+                <h1 class="text-center">BANK SYSTEM</h1>
+                <div th:if="${successMessage}" id="successMessage" class="alert alert-success" role="alert">
+                    <p th:text="${successMessage}"></p>
+                </div>
+                <div class="d-flex justify-content-around mt-4">
+                    <a href="transactions/add" class="btn btn-primary">Make a Transaction</a>
+                    <a href="accounts/add" class="btn btn-primary">Create a Bank Account</a>
+                    <a href="main/add" class="btn btn-primary">Create a Profile</a>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="my-4">
+                <h2 class="text-center">BANKS LIST</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col"># ID</th>
+                            <th scope="col">Bank Name</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="bank : ${banks}">
+                            <td th:text="${bank.getId()}"></td>
+                            <td th:text="${bank.getBankName()}"></td>
+                            <td>
+                                <a th:href="@{'/banks/' + ${bank.getId()}}" class="btn btn-info">Details</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="my-4">
+                <h2 class="text-center">ACCOUNTS LIST</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Account ID</th>
+                            <th scope="col">Account Owner</th>
+                            <th scope="col">BANK</th>
+                            <th scope="col">Account Balance</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="acc : ${accounts}">
+                            <td th:text="${acc.getId()}"></td>
+                            <td th:text="${acc.getOwner().getUsername()}"></td>
+                            <td th:text="${acc.getAccountInParticularBank().getBankName()}"></td>
+                            <td th:text="${acc.getBalance()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="my-4">
+                <h2 class="text-center">USERS LIST</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">User Name</th>
+                            <th scope="col"># Accounts Owned</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.getUsername()}"></td>
+                            <td th:text="${user.getAssociatedAccounts().size()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="my-4">
+                <h2 class="text-center">TRANSACTIONS LIST</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Transaction ID</th>
+                            <th scope="col">Origination Account ID</th>
+                            <th scope="col">Resulting Account ID</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Type</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${transactions.size() == 0}">
+                            <td colspan="5">NO TRANSACTIONS YET</td>
+                        </tr>
+                        <tr th:each="transaction : ${transactions}" th:unless="${transactions.size() == 0}">
+                            <td th:text="${transaction.getId()}"></td>
+                            <td th:text="${transaction.getOriginatingAcc()}"></td>
+                            <td th:text="${transaction.getResultingAcc()}"></td>
+                            <td th:text="${transaction.getAmount()}"></td>
+                            <td th:text="${transaction.getTransactionType().toString()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-v0Zv7PhH0L2Paf2x3R/gHG9L+Jpqzn45d73VPcV+JZGmR+aEmtF1g0uHBU1zIRgD"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+        crossorigin="anonymous"></script>
+
+
+<script>
+
+    setTimeout(function() {
+        var successMessage = document.getElementById('successMessage');
+        successMessage.style.display = 'none';
+    }, 3000);
+
+</script>
+
+</body>
+</html>
