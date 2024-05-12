@@ -3,6 +3,7 @@ package linkplus.internshipchallenge.service.impl;
 import linkplus.internshipchallenge.config.*;
 import linkplus.internshipchallenge.model.*;
 import linkplus.internshipchallenge.model.enums.*;
+import linkplus.internshipchallenge.repository.*;
 import linkplus.internshipchallenge.service.*;
 import org.springframework.stereotype.*;
 
@@ -13,8 +14,15 @@ import java.util.*;
 public class BankService implements IBankService {
 
 
+
+    private final BankRepository bankRepository;
+
+    public BankService(BankRepository bankRepository) {
+        this.bankRepository = bankRepository;
+    }
+
     @Override
-    public double totalTransferAmount(int id) {
+    public double totalTransferAmount(long id) {
         return getBankById(id).getAccounts().stream()
                 .flatMap(a -> a.getTransactionList().stream())
                 .filter(t -> t.getTransactionType().toString().contains("TRANSFER"))
@@ -23,7 +31,7 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public double totaltransactionFlatFee(int id) {
+    public double totaltransactionFlatFee(long id) {
         return listAllBanks()
                 .stream()
                 .filter(b -> b.getId() == id)
@@ -35,7 +43,7 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public double totaltransactionPercentFee(int id) {
+    public double totaltransactionPercentFee(long id) {
         return listAllBanks()
                 .stream()
                 .filter(b -> b.getId() == id)
@@ -47,7 +55,7 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public long percentageFeesCount(int id) {
+    public long percentageFeesCount(long id) {
         return listAllBanks()
                 .stream()
                 .filter(b -> b.getId() == id)
@@ -58,7 +66,7 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public long flatFeeesCount(int id) {
+    public long flatFeeesCount(long id) {
         return listAllBanks()
                 .stream()
                 .filter(b -> b.getId() == id)
@@ -69,7 +77,7 @@ public class BankService implements IBankService {
     }
 
     @Override
-    public long transactionCount(int id) {
+    public long transactionCount(long id) {
         return getBankById(id)
                 .getAccounts()
                 .stream().mapToLong(a -> a.getTransactionList().size())
@@ -78,30 +86,29 @@ public class BankService implements IBankService {
 
     @Override
     public List<Bank> listAllBanks() {
-        return DataHolder.bankList;
+       return bankRepository.findAll();
     }
 
     @Override
-    public Bank getBankById(int id) {
-        return listAllBanks().stream()
-                .filter(b -> b.getId() == id)
-                .findFirst()
-                .get();
+    public Bank getBankById(long id) {
+          return bankRepository.findById(id).get();
     }
 
     @Override
     public Bank findBankByName(String bankName) {
-        return listAllBanks().stream()
-                .filter(b -> b.getBankName().equals(bankName))
-                .findFirst()
-                .get();
+         return bankRepository.findBankByBankName(bankName);
     }
 
     @Override
-    public boolean bankHasUser(Integer bankID, String ownerName) {
+    public boolean bankHasUser(long bankID, String ownerName) {
         Bank bank = getBankById(bankID);
 
         return bank.getAccounts().stream()
                    .anyMatch(a -> a.getOwner().getUsername().equals(ownerName));
+    }
+
+    @Override
+    public Bank create(String bankName) {
+        return bankRepository.save(new Bank(bankName));
     }
 }

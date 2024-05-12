@@ -3,6 +3,7 @@ package linkplus.internshipchallenge.service.impl;
 import linkplus.internshipchallenge.config.*;
 import linkplus.internshipchallenge.model.*;
 import linkplus.internshipchallenge.model.enums.*;
+import linkplus.internshipchallenge.repository.*;
 import linkplus.internshipchallenge.service.*;
 import org.springframework.stereotype.*;
 
@@ -14,20 +15,23 @@ public class TransactionService implements ITransactionService {
     private static final double TRANSACTION_PERCENTAGE_FEE=0.05;
     private static final int TRANSACTION_FLAT_FEE=10;
 
+
+    private final TransactionRepository transactionRepository;
     private final BankService bankService;
 
-    public TransactionService(BankService bankService) {
+    public TransactionService(TransactionRepository transactionRepository, BankService bankService) {
+        this.transactionRepository = transactionRepository;
         this.bankService = bankService;
     }
 
     @Override
     public List<Transaction> listAllTransactions() {
-        return DataHolder.transactionList;
+        return transactionRepository.findAll();
     }
 
 
     @Override
-    public void create(Integer originatingAccID, Integer resultingAccID, Double amount, String feeType, Integer originatingBankId, Integer resultingBankID) {
+    public Transaction create(Integer originatingAccID, Integer resultingAccID, Double amount, String feeType, Integer originatingBankId, Integer resultingBankID) {
         Transaction transaction = null;
         Bank originatingBank = bankService.getBankById(originatingBankId);
 
@@ -84,7 +88,7 @@ public class TransactionService implements ITransactionService {
         }
 
         originatingAccount.getTransactionList().add(transaction);
-        DataHolder.transactionList.add(transaction);
+        return transactionRepository.save(transaction);
     }
 
 

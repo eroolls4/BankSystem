@@ -2,6 +2,7 @@ package linkplus.internshipchallenge.service.impl;
 
 import linkplus.internshipchallenge.config.*;
 import linkplus.internshipchallenge.model.*;
+import linkplus.internshipchallenge.repository.*;
 import linkplus.internshipchallenge.service.*;
 import org.springframework.stereotype.*;
 
@@ -10,35 +11,33 @@ import java.util.*;
 
 @Service
 public class UserService implements IUserService {
-    @Override
-    public void addAccount(Account account) {
 
+
+   private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @Override
-    public List<Account> getAllAccountPerUser() {
-        return null;
-    }
 
     @Override
     public List<User> listAllUsers() {
-        return DataHolder.users;
+        return userRepository.findAll();
     }
 
     @Override
     public User findByUsername(String username) {
-        return listAllUsers().stream().filter(u -> u.getUsername().equals(username))
-                .findFirst().get();
+        return userRepository.findUserByUsername(username);
     }
 
     @Override
-    public void createUser(String username) {
+    public User createUser(String username) {
         User user = new User(username);
-        DataHolder.users.add(user);
+       return userRepository.save(user);
     }
 
     @Override
-    public User findByID(Integer userID) {
-        return listAllUsers().stream().filter(u -> u.getId() == userID).findFirst().get();
+    public User findByID(long userID) {
+        return userRepository.findById(userID).get();
     }
 }

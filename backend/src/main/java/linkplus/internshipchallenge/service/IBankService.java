@@ -6,14 +6,17 @@ import linkplus.internshipchallenge.model.*;
 import java.util.*;
 
 public interface IBankService {
-    double totalTransferAmount(int id);
-    double totaltransactionFlatFee(int id);
-    double totaltransactionPercentFee(int id);
-    long percentageFeesCount(int id);
-    long flatFeeesCount(int id);
-    long transactionCount(int id);
+    double totalTransferAmount(long id);
+    double totaltransactionFlatFee(long id);
+    double totaltransactionPercentFee(long id);
+    long percentageFeesCount(long id);
+    long flatFeeesCount(long id);
+    long transactionCount(long id);
     List<Bank> listAllBanks();
-    Bank getBankById(int id);
+    Bank getBankById(long id);
     Bank findBankByName(String bankName);
-    boolean bankHasUser(Integer bankID, String ownerName);
+
+    boolean bankHasUser(long bankID, String ownerName);
+
+    Bank create(String bankName);
 }

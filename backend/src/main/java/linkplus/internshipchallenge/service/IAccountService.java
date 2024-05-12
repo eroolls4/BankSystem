@@ -6,8 +6,7 @@ import linkplus.internshipchallenge.model.*;
 import java.util.*;
 
 public interface IAccountService {
-    void addTransaction(Transaction transaction);
-    Account getAccountByID(int id);
+    Account getAccountByID(long id);
     List<Account> listAllAccounts();
     void createBankAccount(Integer ownerName, Integer bankName);
 }

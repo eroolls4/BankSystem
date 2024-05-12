@@ -1,22 +1,25 @@
 package linkplus.internshipchallenge.model;
 
+import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.*;
 
+@Entity
+@Table(name = "bank_users")
 @Data
 public class User {
 
-    private static int ID_TRACKER = 1;
-    private int id;
-    List<Account> associatedAccounts;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Account> associatedAccounts;
     private String username;
 
     public User() { }
 
     public User(String username) {
         this.username = username;
-        this.id = ID_TRACKER++;
-        associatedAccounts=new ArrayList<>();
+        associatedAccounts = new ArrayList<>();
     }
 }

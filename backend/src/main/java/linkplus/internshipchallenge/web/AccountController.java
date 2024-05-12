@@ -32,8 +32,8 @@ public class AccountController {
 
 
     @PostMapping("/add")
-    public String createBankAccount(@RequestParam Integer ownerID,
-                                    @RequestParam Integer bankID,
+    public String createBankAccount(@RequestParam int ownerID,
+                                    @RequestParam int bankID,
                                     Model model) {
         try {
             this.accountService.createBankAccount(ownerID, bankID);

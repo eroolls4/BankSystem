@@ -34,4 +34,18 @@ public class BankController {
             return "bank-not-found";
         }
     }
+
+
+    @GetMapping("/add")
+    public String addBank(){
+        return "addBank";
+    }
+
+    @PostMapping("/add")
+    public String addBank(@RequestParam String bankName){
+        this.bankService.create(bankName);
+        return "redirect:/main";
+    }
+
+
 }

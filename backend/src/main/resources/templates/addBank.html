@@ -35,11 +35,11 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="form-container">
-            <form id="filter-form" th:method="POST" th:action="@{'/main'}">
+            <form id="filter-form" th:method="POST" th:action="@{'/banks/add'}">
 
                 <div class="form-group">
-                    <label for="name" class="form-label">Select username:</label>
-                    <input type="text" id="name" name="username" class="form-control" required>
+                    <label for="bankName" class="form-label">Select Bank Name:</label>
+                    <input type="text" id="bankName" name="bankName" class="form-control" required>
                 </div>
 
                 <div class="form-submit">
